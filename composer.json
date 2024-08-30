@@ -1,6 +1,6 @@
 {
     "name": "trueandfalse/essential",
-    "description": "Essential tools for projects",
+    "description": "Essential tools for Laravel Projects",
     "type": "library",
     "license": "MIT",
     "autoload": {
