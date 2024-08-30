@@ -11,9 +11,9 @@ class EssentialTenantServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(): void
+    public function boot(\Illuminate\Contracts\Http\Kernel $kernel): void
     {
-        $this->pushMiddleware(EssenTenant::class);
+        $kernel->push(EssenTenant::class);
 
         if (app()->runningInConsole()) {
             $this->publishesMigrations([
