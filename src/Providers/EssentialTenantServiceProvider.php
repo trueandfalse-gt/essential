@@ -15,6 +15,8 @@ class EssentialTenantServiceProvider extends ServiceProvider
     {
         $kernel->pushMiddleware(EssenTenant::class);
 
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'errors');
+
         if (app()->runningInConsole()) {
             $this->publishesMigrations([
                 __DIR__ . '/../database/migrations/tenants' => database_path('migrations/tenants'),
