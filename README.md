@@ -3,6 +3,7 @@
 # Essential
 
 ### Installation
+
 ```
 composer require trueandfalse/essential
 ```
@@ -33,10 +34,7 @@ Trueandfalse\essentail\Providers\ProjectAppTenantServiceProvider::class,
     'prefix_indexes' => true,
     'strict'         => true,
     'engine'         => null,
-    'options'        => extension_loaded('pdo_mysql') ? array_filter([
-        PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-    ]) : [],
-],
+    'options'        => extension_loaded('pdo_mysql') ? array_filter([PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),]) : [],]
 ```
 
 #### use in .env
@@ -55,26 +53,4 @@ TENANTS_PORT=3306
 TENANTS_DATABASE=app_tenants
 TENANTS_USERNAME=root
 TENANTS_PASSWORD="password"
-```
-
----
-
-====================================================================
-
-#### Route.php example
-
-```
-Auth::routes();
-Route::get('/', function () {
-    return view('home.index');
-});
-
-Route::middleware(['auth', 'hcAccess', 'hcMenu'])->group(function () {
-
-    Route::get('/', 'Backend\InicioController@index')->name('inicio.index');
-    Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function() {
-        Route::resource('roles', 'RolesController');
-        Route::resource('usuarios', 'UsuariosController');
-    });
-});
 ```
