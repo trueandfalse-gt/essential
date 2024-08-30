@@ -10,10 +10,10 @@ composer require trueandfalse/essential
 
 ## Multitenancy
 
-#### copy in config/app.php
+#### copy in boostrap/providers.php
 
 ```
-Trueandfalse\essentail\Providers\ProjectAppTenantServiceProvider::class,
+Trueandfalse\essentail\Providers\EssentialTenantServiceProvider::class,
 ```
 
 #### add config/database.php
