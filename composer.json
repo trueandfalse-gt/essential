@@ -1,0 +1,21 @@
+{
+    "name": "trueandfalse/essential",
+    "description": "Essential tools for projects",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Trueandfalse\\Essential\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Valeriano Chete",
+            "email": "vjchete@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0"
+    },
+    "minimum-stability": "stable"
+}
