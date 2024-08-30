@@ -1,7 +1,7 @@
 {
     "name": "trueandfalse/essential",
     "description": "Essential tools for projects",
-    "type": "project",
+    "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
