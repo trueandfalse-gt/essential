@@ -4,7 +4,7 @@ namespace Trueandfalse\Essential\Middleware;
 use Closure;
 use Trueandfalse\Essential\Models\Tenant\Tenant;
 
-class AppTenant
+class EssenTenant
 {
 
     public function handle($request, Closure $next)

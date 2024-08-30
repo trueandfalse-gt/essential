@@ -2,9 +2,9 @@
 namespace Trueandfalse\Essential\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Trueandfalse\Essential\Middleware\AppTenant;
+use Trueandfalse\Essential\Middleware\EssenTenant;
 
-class ProjectAppTenantServiceProvider extends ServiceProvider
+class EssentialTenantServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -13,6 +13,6 @@ class ProjectAppTenantServiceProvider extends ServiceProvider
      */
     public function boot(\Illuminate\Contracts\Http\Kernel $kernel)
     {
-        $kernel->pushMiddleware(AppTenant::class);
+        $kernel->pushMiddleware(EssenTenant::class);
     }
 }
