@@ -17,7 +17,7 @@ class EssentialTenantServiceProvider extends ServiceProvider
 
         if (app()->runningInConsole()) {
             $this->publishesMigrations([
-                __DIR__ . '/../database/migrations' => database_path('migrations'),
+                __DIR__ . '/../database/migrations/tenants' => database_path('migrations/tenants'),
             ], 'essentenant-migrations');
         }
     }
