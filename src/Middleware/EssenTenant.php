@@ -23,11 +23,11 @@ class EssenTenant
         }
 
         config([
-            'database.connections.mysql.tenantid' => $tenant->tenant_id,
-            'database.connections.mysql.host'     => $tenant->db_host,
-            'database.connections.mysql.database' => $tenant->db,
-            'database.connections.mysql.username' => $tenant->db_username,
-            'database.connections.mysql.password' => $tenant->db_password,
+            'database.connections.mysql.tenantid' => $tenant->id,
+            'database.connections.mysql.host'     => $tenant->database_host,
+            'database.connections.mysql.database' => $tenant->database_name,
+            'database.connections.mysql.username' => $tenant->database_user,
+            'database.connections.mysql.password' => $tenant->database_password,
         ]);
 
         return $next($request);

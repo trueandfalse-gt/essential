@@ -10,10 +10,23 @@ composer require trueandfalse/essential
 
 ## Multitenancy
 
-#### copy in boostrap/providers.php
+#### Provider configuration
 
 ```
+copy in boostrap/providers.php
 Trueandfalse\essentail\Providers\EssentialTenantServiceProvider::class,
+```
+
+#### Vendor Published
+
+```
+php artisan vendor:publish
+```
+
+#### Migrate
+
+```
+ php artisan migrate --database=tenants --path=database/migrations/tenants
 ```
 
 #### add config/database.php
