@@ -33,7 +33,8 @@ class TenantsSeeder extends Command
         $dbs = Tenant::when($id, function ($q) use ($id) {
             $q->whereIn('id', $id);
         })
-            ->pluck('database');
+            ->select('database_name')
+            ->pluck('database_name');
 
         foreach ($dbs as $db) {
             $this->info("Seeding {$db}...");
