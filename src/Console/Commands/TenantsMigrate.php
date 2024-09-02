@@ -38,7 +38,7 @@ class TenantsMigrate extends Command
             ->get();
 
         foreach ($dbs as $db) {
-            $this->info("Migrating {$db}...");
+            $this->info("Migrating {$db->database_name}...");
             DB::purge('mysql');
             config()->set('database.connections.mysql.database', $db->database_name);
             config()->set('database.connections.mysql.username', $db->database_user);
