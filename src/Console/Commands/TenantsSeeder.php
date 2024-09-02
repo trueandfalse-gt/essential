@@ -33,13 +33,15 @@ class TenantsSeeder extends Command
         $dbs = Tenant::when($id, function ($q) use ($id) {
             $q->whereIn('id', $id);
         })
-            ->select('database_name')
-            ->pluck('database_name');
+            ->select('database_name', 'database_user', 'database_password')
+            ->get();
 
         foreach ($dbs as $db) {
             $this->info("Seeding {$db}...");
             DB::purge('mysql');
-            config()->set('database.connections.mysql.database', $db);
+            config()->set('database.connections.mysql.database', $db->database_name);
+            config()->set('database.connections.mysql.username', $db->database_user);
+            config()->set('database.connections.mysql.password', $db->database_password);
             DB::reconnect('mysql');
 
             $this->call('db:seed', ['--class' => $this->option('class')]);
