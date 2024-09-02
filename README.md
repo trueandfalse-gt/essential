@@ -53,9 +53,9 @@ add config/database.php
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
-DB_DATABASE=
-DB_USERNAME=
-DB_PASSWORD=
+# DB_DATABASE=
+# DB_USERNAME=
+# DB_PASSWORD=
 
 TENANTS_CONNECTION=tenants
 TENANTS_HOST=mysql
@@ -67,6 +67,20 @@ TENANTS_PASSWORD="password"
 
 #### Migrate
 
+Conection Tenants migrate
+
 ```
  php artisan migrate --database=tenants --path=database/migrations/tenants
+```
+
+#### Tenants migrate
+
+```
+ php artisan migrate:tenants
+```
+
+#### Tenants Seed
+
+```
+ php artisan db:tenants
 ```
