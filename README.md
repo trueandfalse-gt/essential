@@ -67,7 +67,7 @@ TENANTS_PASSWORD="password"
 
 #### Migrate
 
-Conection Tenants migrate
+Connection Tenants migrate
 
 ```
  php artisan migrate --database=tenants --path=database/migrations/tenants
