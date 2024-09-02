@@ -12,8 +12,9 @@ composer require trueandfalse/essential
 
 #### Provider configuration
 
-```
 copy in boostrap/providers.php
+
+```
 Trueandfalse\essentail\Providers\EssentialTenantServiceProvider::class,
 ```
 
@@ -23,13 +24,9 @@ Trueandfalse\essentail\Providers\EssentialTenantServiceProvider::class,
 php artisan vendor:publish
 ```
 
-#### Migrate
+#### Database Configuration
 
-```
- php artisan migrate --database=tenants --path=database/migrations/tenants
-```
-
-#### add config/database.php
+add config/database.php
 
 ```
 'tenants' => [
@@ -66,4 +63,10 @@ TENANTS_PORT=3306
 TENANTS_DATABASE=app_tenants
 TENANTS_USERNAME=root
 TENANTS_PASSWORD="password"
+```
+
+#### Migrate
+
+```
+ php artisan migrate --database=tenants --path=database/migrations/tenants
 ```

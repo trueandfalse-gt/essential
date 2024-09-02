@@ -3,6 +3,8 @@ namespace Trueandfalse\Essential\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Trueandfalse\Essential\Middleware\EssenTenant;
+use Trueandfalse\Essential\Console\Commands\TenantsSeeder;
+use Trueandfalse\Essential\Console\Commands\TenantsMigrate;
 
 class EssentialTenantServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,11 @@ class EssentialTenantServiceProvider extends ServiceProvider
             $this->publishesMigrations([
                 __DIR__ . '/../database/migrations/tenants' => database_path('migrations/tenants'),
             ], 'essentenant-migrations');
+
+            $this->commands([
+                TenantsMigrate::class,
+                TenantsSeeder::class,
+            ]);
         }
     }
 }
