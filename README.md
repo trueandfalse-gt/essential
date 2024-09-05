@@ -5,7 +5,7 @@
 ### Installation
 
 ```
-composer require trueandfalse/essential
+ composer require trueandfalse/essential
 ```
 
 ## Multitenancy
@@ -15,13 +15,13 @@ composer require trueandfalse/essential
 copy in boostrap/providers.php
 
 ```
-Trueandfalse\essentail\Providers\EssentialTenantServiceProvider::class,
+ Trueandfalse\essentail\Providers\EssentialTenantServiceProvider::class,
 ```
 
 #### Vendor Published
 
 ```
-php artisan vendor:publish
+ php artisan vendor:publish --tag=essentenant-migrations
 ```
 
 #### Database Configuration
@@ -29,7 +29,7 @@ php artisan vendor:publish
 add config/database.php
 
 ```
-'tenants' => [
+ 'tenants' => [
     'driver'         => 'mysql',
     'url'            => env('DATABASE_URL_TENANTS'),
     'host'           => env('TENANTS_HOST', '127.0.0.1'),
@@ -50,19 +50,19 @@ add config/database.php
 #### use in .env
 
 ```
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-# DB_DATABASE=
-# DB_USERNAME=
-# DB_PASSWORD=
+ DB_CONNECTION=mysql
+ DB_HOST=mysql
+ DB_PORT=3306
+ # DB_DATABASE=
+ # DB_USERNAME=
+ # DB_PASSWORD=
 
-TENANTS_CONNECTION=tenants
-TENANTS_HOST=mysql
-TENANTS_PORT=3306
-TENANTS_DATABASE=app_tenants
-TENANTS_USERNAME=root
-TENANTS_PASSWORD="password"
+ TENANTS_CONNECTION=tenants
+ TENANTS_HOST=mysql
+ TENANTS_PORT=3306
+ TENANTS_DATABASE=app_tenants
+ TENANTS_USERNAME=root
+ TENANTS_PASSWORD="password"
 ```
 
 #### Migrate
@@ -82,5 +82,31 @@ Connection Tenants migrate
 #### Tenants Seed
 
 ```
+ php artisan db:tenants
+```
+
+## Authenticated Access
+
+#### Provider configuration
+
+copy in boostrap/providers.php
+
+```
+ Trueandfalse\essentail\Providers\EssentialAccessServiceProvider::class,
+```
+
+#### Vendor Published
+
+```
+ php artisan vendor:publish --tag=essenauth-migrations
+ php artisan vendor:publish --tag=essenauth-models
+ php artisan vendor:publish --tag=essenauth-seeders
+```
+
+#### authentication migrate,seed
+
+```
+ php artisan migrate:tenants
+ php artisan db:tenants --class=AuthDefaultSeeder
  php artisan db:tenants
 ```
