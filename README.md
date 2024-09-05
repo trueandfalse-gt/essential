@@ -103,7 +103,9 @@ copy in boostrap/providers.php
  php artisan vendor:publish --tag=essenauth-seeders
 ```
 
-#### authentication migrate,seed
+#### Authentication Migrate, Seeder
+
+Multitenancy
 
 ```
  php artisan migrate:tenants
