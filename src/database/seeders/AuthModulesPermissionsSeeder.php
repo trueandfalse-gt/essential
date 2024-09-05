@@ -27,21 +27,6 @@ class AuthModulesPermissionsSeeder extends Seeder
         $this->add('admin.users', PermissionIds::ALL);
         $this->add('admin.roles', PermissionIds::ALL);
 
-        // catalogs
-        $this->add('catalogs.customers', PermissionIds::ALL);
-        $this->add('catalogs.providers', PermissionIds::ALL);
-        $this->add('catalogs.branches', PermissionIds::ALL);
-        $this->add('catalogs.types_payments', PermissionIds::ALL);
-
-        // inventory
-        $this->add('inventory.catalogs.brands', PermissionIds::ALL);
-        $this->add('inventory.catalogs.presentations', PermissionIds::ALL);
-        $this->add('inventory.catalogs.categories', PermissionIds::ALL);
-        $this->add('inventory.catalogs.products', PermissionIds::ALL);
-        $this->add('inventory.adjustments.income', PermissionIds::ALL);
-        $this->add('inventory.adjustments.outputs', PermissionIds::ALL);
-        $this->add('inventory.purchases', PermissionIds::ALL);
-
         ModulePermission::insert($this->inserts);
     }
 
