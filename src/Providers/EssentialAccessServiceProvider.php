@@ -23,6 +23,9 @@ class EssentialAccessServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../Models/Auth' => app_path('Models/Auth'),
             ], 'essenauth-models');
+            $this->publishes([
+                __DIR__ . '/../database/seeders' => database_path('seeders'),
+            ], 'essenauth-seeders');
         }
     }
 }
