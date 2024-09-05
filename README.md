@@ -105,10 +105,8 @@ copy in boostrap/providers.php
 
 #### Authentication Migrate, Seeder
 
-Multitenancy
-
 ```
- php artisan migrate:tenants
- php artisan db:tenants --class=AuthDefaultSeeder
- php artisan db:tenants
+ php artisan migrate
+ php artisan db:seed --class=AuthDefaultSeeder
+ php artisan db:seed
 ```
