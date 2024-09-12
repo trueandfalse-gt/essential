@@ -5,8 +5,8 @@ use App\Models\Auth\Role;
 use App\Models\Auth\User;
 use App\Models\Auth\UserRole;
 use Illuminate\Database\Seeder;
-use Database\Seeders\AdminSeeder;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\AuthAdminSeeder;
 use Illuminate\Support\Facades\Schema;
 
 class AuthDefaultSeeder extends Seeder
@@ -45,7 +45,7 @@ class AuthDefaultSeeder extends Seeder
 
         Schema::enableForeignKeyConstraints();
 
-        $AS = new AdminSeeder;
+        $AS = new AuthAdminSeeder;
         $AS->run();
 
         $DB = new DatabaseSeeder;
