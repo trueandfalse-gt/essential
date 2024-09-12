@@ -5,7 +5,7 @@ use App\Models\Auth\Role;
 use App\Models\Auth\User;
 use App\Models\Auth\UserRole;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Database\Seeders\AdminSeeder;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -43,11 +43,10 @@ class AuthDefaultSeeder extends Seeder
             ],
         ]);
 
-        DB::statement('UPDATE auth_roles SET created_at=NOW(), updated_at=NOW()');
-        DB::statement('UPDATE users SET created_at=NOW(), updated_at=NOW()');
-        DB::statement('UPDATE auth_user_roles SET created_at=NOW(), updated_at=NOW()');
-
         Schema::enableForeignKeyConstraints();
+
+        $AS = new AdminSeeder;
+        $AS->run();
 
         $DB = new DatabaseSeeder;
         $DB->run();

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AuthModulesSeeder::class);
         $this->call(AuthModulesPermissionsSeeder::class);
         $this->call(AuthMenuSeeder::class);
+        $this->call(AdminSeeder::class);
         Schema::enableForeignKeyConstraints();
 
     }

@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class AdminSeeder extends Seeder
+class AuthAdminSeeder extends Seeder
 {
     public function run()
     {

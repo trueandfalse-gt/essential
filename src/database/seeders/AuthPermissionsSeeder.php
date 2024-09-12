@@ -22,7 +22,7 @@ class AuthPermissionsSeeder extends Seeder
         $this->add(4, 'edit', 'Editar');
         $this->add(5, 'update', 'Actualizar', false);
         $this->add(6, 'destroy', 'Borrar');
-        $this->add(7, 'data', 'Obtener datos');
+        $this->add(7, 'data', 'Obtener datos', false);
         $this->add(8, 'show', 'Ver detalle');
 
         Permission::insert($this->inserts);
