@@ -12,7 +12,7 @@ class AuthAdminSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
 
         DB::statement('DELETE FROM auth_role_module_permissions WHERE role_id = 1');
-        DB::statement('INSERT INTO auth_role_module_permissions (role_id, module_permission_id, created_at, updated_at) SELECT 1, id, NOW(), NOW() FROM auth_module_permissions');
+        DB::statement('INSERT INTO auth_role_module_permissions (role_id, module_permission_id) SELECT 1, id FROM auth_module_permissions');
 
         Schema::enableForeignKeyConstraints();
     }
