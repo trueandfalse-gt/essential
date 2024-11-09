@@ -4,6 +4,7 @@ namespace Trueandfalse\Essential\Providers;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Trueandfalse\Essential\Middleware\EssenAccess;
+use Trueandfalse\Essential\Routing\EssenResourceRegistrer;
 
 class EssentialAccessServiceProvider extends ServiceProvider
 {
@@ -14,6 +15,12 @@ class EssentialAccessServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $register = new EssenResourceRegistrer($this->app['router']);
+
+        $this->app->bind('Illuminate\Routing\ResourceRegistrar', function () use ($register) {
+            return $register;
+        });
+
         $this->app->make(Router::class)->aliasMiddleware('essen-access', EssenAccess::class);
 
         if (app()->runningInConsole()) {
