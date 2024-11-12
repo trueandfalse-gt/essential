@@ -110,3 +110,40 @@ copy in boostrap/providers.php
  php artisan db:seed --class=AuthDefaultSeeder
  php artisan db:seed
 ```
+
+## Vue
+
+### Configuration Vite components
+
+```
+resolve: {
+        alias: {
+            '@': '/resources/js',
+            '@essen': path.resolve(__dirname, 'vendor/trueandfalse/essential/src/resources/js'),
+        },
+    },
+```
+
+### Configuration app.js components
+
+Example inertial
+
+```
+resolve: name => {
+        let page = null;
+        if (name.startsWith('Essen::')) {
+            const componentName = name.replace('Essen::', '');
+            const pages = import.meta.glob('@essen/**/*.vue', { eager: true });
+            page = pages[`/vendor/trueandfalse/essential/src/resources/js/Pages/${componentName}.vue`];
+        } else {
+            const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
+            page = pages[`./Pages/${name}.vue`];
+        }
+
+        if (page.default.layout === undefined) {
+            page.default.layout = Layout;
+        }
+
+        return page;
+    }
+```
