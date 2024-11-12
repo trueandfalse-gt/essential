@@ -5,6 +5,19 @@ use Illuminate\Http\Request;
 
 trait EssenTrait
 {
+    public function columns_convert($colums)
+    {
+        return $colums->map(function ($column) {
+            return [
+                'key'      => $column['field'],
+                'name'     => $column['name'],
+                'type'     => $column['type'],
+                'class'    => $column['class'],
+                'decimals' => $column['decimals'],
+            ];
+        });
+    }
+
     public static function alertSuccess(Request $request, $message = null)
     {
         $request->session()->flash('alert-message', !$message ? 'El registro sea guardo correctamente.' : $message);
