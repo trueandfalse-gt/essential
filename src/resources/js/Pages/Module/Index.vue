@@ -10,7 +10,7 @@
                     :actionEdit="edit"
                     :actionDestroy="destroy"
                     :permissions="permissions"
-                    :route="`/${currentUrl}/data`"
+                    :route="`/${url}/data`"
                 />
             </template>
         </Card>
@@ -29,7 +29,7 @@ import DataTable from "@essen/components/EssenDataTable.vue";
 const dataTable = ref(null);
 
 const props = defineProps({
-    currentUrl: String,
+    url: String,
     title: String,
     caption: {
         type: String,
@@ -40,7 +40,7 @@ const props = defineProps({
 });
 
 async function create() {
-    router.get(`/${props.currentUrl}/create`);
+    router.get(`/${props.url}/create`);
 }
 
 async function edit(event, id) {
@@ -50,13 +50,13 @@ async function edit(event, id) {
     }
 
     target.classList.toggle("disabled");
-    router.get(`/${props.currentUrl}/${id}/edit`);
+    router.get(`/${props.url}/${id}/edit`);
 }
 
 async function destroy(id) {
     if (confirm("¿Esta seguro de borrar el registro?")) {
         await http
-            .delete(`/${props.currentUrl}/${id}`)
+            .delete(`/${props.url}/${id}`)
             .then((result) => {
                 if (result.data.message) {
                     toast.success(result.data.message);
