@@ -24,7 +24,7 @@ import { router } from "@inertiajs/vue3";
 
 import http from "@/tools/http";
 import Card from "@essen/components/EssenCard.vue";
-import DataTable from "@/components/EssenDataTable.vue";
+import DataTable from "@essen/components/EssenDataTable.vue";
 
 const dataTable = ref(null);
 
