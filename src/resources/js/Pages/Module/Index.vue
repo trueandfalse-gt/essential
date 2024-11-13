@@ -20,7 +20,7 @@
 <script setup>
 import { ref } from "vue";
 import { toast } from "vue3-toastify";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/vue3";
 
 import http from "@/tools/http";
 import Card from "@essen/components/EssenCard.vue";
@@ -40,7 +40,7 @@ const props = defineProps({
 });
 
 async function create() {
-    Inertia.get(`/${props.currentUrl}/create`);
+    router.get(`/${props.currentUrl}/create`);
 }
 
 async function edit(event, id) {
@@ -50,7 +50,7 @@ async function edit(event, id) {
     }
 
     target.classList.toggle("disabled");
-    Inertia.get(`/${props.currentUrl}/${id}/edit`);
+    router.get(`/${props.currentUrl}/${id}/edit`);
 }
 
 async function destroy(id) {
