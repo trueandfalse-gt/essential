@@ -18,7 +18,7 @@ trait EssenTrait
         });
     }
 
-    private function moduleBase($routeName, $separator = '.')
+    public function moduleBase($routeName, $separator = '.')
     {
         $arr = explode('.', $routeName);
         array_pop($arr);
