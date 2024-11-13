@@ -7,11 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Auth\Permission;
 use App\Models\Auth\ModulePermission;
 use App\Models\Auth\RolModulePermission;
-use Trueandfalse\Essential\Traits\EssenTrait;
 
 class EssenAccessController
 {
-    use EssenTrait;
     public static function accessRoute(Request $request, $routeName)
     {
         $exist = Route::has($routeName);
@@ -20,7 +18,9 @@ class EssenAccessController
             abort(404, 'Page not found');
         }
 
-        $moduleName = self::moduleBase($routeName);
+        $arr            = explode('.', $routeName);
+        $permissionName = array_pop($arr);
+        $moduleName     = implode('.', $arr);
 
         $module = ModulePermission::select('m.id')
             ->leftJoin('auth_modules as m', 'auth_module_permissions.module_id', 'm.id')
