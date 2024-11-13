@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 trait EssenTrait
 {
-    public function columns_convert($colums)
+    public function columnsConvert($colums)
     {
         return $colums->map(function ($column) {
             return [
@@ -16,6 +16,14 @@ trait EssenTrait
                 'decimals' => $column['decimals'],
             ];
         });
+    }
+
+    private function moduleBase($routeName, $separator = '.')
+    {
+        $arr = explode('.', $routeName);
+        array_pop($arr);
+
+        return implode($separator, $arr);
     }
 
     public static function alertSuccess(Request $request, $message = null)
