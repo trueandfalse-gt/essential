@@ -7,9 +7,10 @@ use App\Models\Auth\ModulePermission;
 
 abstract class PermissionIds
 {
-    const INDEX  = 1;
-    const REPORT = [1, 3];
-    const ALL    = [1, 2, 3, 4, 5, 6, 7, 8];
+    const INDEX   = 1;
+    const REPORT  = [1, 3];
+    const CATALOG = [1, 2, 3, 4, 5, 6, 7];
+    const ALL     = [1, 2, 3, 4, 5, 6, 7, 8];
 }
 
 class AuthModulesPermissionsSeeder extends Seeder
@@ -24,8 +25,8 @@ class AuthModulesPermissionsSeeder extends Seeder
         ModulePermission::truncate();
 
         $this->add('dashboard', PermissionIds::INDEX);
-        $this->add('admin.users', PermissionIds::ALL);
-        $this->add('admin.roles', PermissionIds::ALL);
+        $this->add('admin.users', PermissionIds::CATALOG);
+        $this->add('admin.roles', PermissionIds::CATALOG);
 
         ModulePermission::insert($this->inserts);
     }
