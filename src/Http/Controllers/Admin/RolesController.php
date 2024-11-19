@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Auth\ModulePermission;
 use App\Models\Auth\RolModulePermission;
 use Trueandfalse\Essential\Traits\EssenTrait;
+use Trueandfalse\Essential\Http\Controllers\EssenCrudController;
 
 class RolesController extends EssenCrudController
 {
