@@ -49,7 +49,7 @@ class EssenMenuController extends Controller
 
             self::menuBuild();
 
-            return self::$menu;
+            return collect(self::$menu)->values();
         });
 
         return $menu;
