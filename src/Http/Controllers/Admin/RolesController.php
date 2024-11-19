@@ -37,6 +37,11 @@ class RolesController extends EssenCrudController
         return Inertia::render('Essen::Module/Index', $props);
     }
 
+    public function create(Request $request)
+    {
+        return $this->edit($request, 0);
+    }
+
     public function edit(Request $request, $rowId)
     {
         if ($rowId != 0) {
@@ -95,7 +100,7 @@ class RolesController extends EssenCrudController
         ]);
 
         if ($rowId == 0) {
-            $role = Role::firstOrNew(['nombre' => $request->nombre]);
+            $role = new Role;
         } else {
             $role = Role::find($rowId);
         }
