@@ -25,8 +25,8 @@ class AuthMenuSeeder extends Seeder
         $this->add('dashboard', 'Inicio', 1, 'fas fa-star', null);
 
         $this->add('admin', 'Admin', 10000, 'fas fa-gears', null);
-        $this->add('admin.users', 'Usuarios', 100, null, 'admin');
-        $this->add('admin.roles', 'Roles', 200, null, 'admin');
+        $this->add('admin.users', 'Usuarios', 100, 'fas fa-users', 'admin');
+        $this->add('admin.roles', 'Roles', 200, 'fas fa-user-shield', 'admin');
 
         $inserts = collect($this->inserts)->map(function ($item) {
             unset($item['module']);
