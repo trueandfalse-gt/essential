@@ -132,11 +132,11 @@ class EssenCrudController extends Controller
             }
         } catch (Exception $e) {
             if ($this->vue == true) {
-                abort(404, 'Error al encontrar el registro.');
-                // return AppController::responseJson(false, ['message' => 'Error al encontrar el registro.']);
+                abort(404, trans('Registro no encontrado.'));
+                // return AppController::responseJson(false, ['message' => trans('Registro no encontrado.')]);
             }
 
-            $request->session()->flash('alert-msj', 'Error al encontrar el registro.');
+            $request->session()->flash('alert-msj', trans('Registro no encontrado.'));
             $request->session()->flash('alert-type', 'danger');
 
             return redirect()->back();
@@ -207,10 +207,10 @@ class EssenCrudController extends Controller
             }
         } catch (Exception $e) {
             if ($this->vue == true) {
-                abort(406, 'Error al almacenar el registro.');
-                // return AppController::responseJson(false, ['message' => 'Error al almacenar el registro.']);
+                abort(406, trans('Registro no almacenado.'));
+                // return AppController::responseJson(false, ['message' => trans('Registro no almacenado.')]);
             }
-            $request->session()->flash('alert-msj', 'Error al almacenar el registro.');
+            $request->session()->flash('alert-msj', trans('Registro no almacenado.'));
             $request->session()->flash('alert-type', 'danger');
 
             return redirect()->back();
@@ -320,24 +320,24 @@ class EssenCrudController extends Controller
             $model->save();
         } catch (QueryException $e) {
             if ($this->vue == true) {
-                abort(406, 'Error al almacenar el registro.' . $e->getMessage());
+                abort(406, trans('Registro no almacenado.') . $e->getMessage());
 
-                // return response()->json(['message' => 'Error al almacenar el registro.']);
+                // return response()->json(['message' => trans('Registro no almacenado.')]);
             }
 
-            $request->session()->flash('alert-msj', 'Error al almacenar el registro.' . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
+            $request->session()->flash('alert-msj', trans('Registro no almacenado.') . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
             $request->session()->flash('alert-type', 'danger');
 
             return redirect()->back();
         }
 
         if ($this->vue == true) {
-            return response()->json(['message' => 'El registro se ha almacenado correctamente.']);
+            return response()->json(['message' => trans('Registro almacenado correctamente.')]);
 
-            // return AppController::responseJson(['message' => 'El registro se ha almacenado correctamente.']);
+            // return AppController::responseJson(['message' => trans('Registro almacenado correctamente.')]);
         }
 
-        $request->session()->flash('alert-msj', 'El registro se ha almacenado correctamente.');
+        $request->session()->flash('alert-msj', trans('Registro almacenado correctamente.'));
         $request->session()->flash('alert-type', 'success');
 
         return redirect()->route($this->module . '.index', ['id' => $request->id]);
@@ -358,12 +358,12 @@ class EssenCrudController extends Controller
             }
         } catch (Exception $e) {
             if ($this->vue == true) {
-                abort(406, 'Error al eliminar el registro.');
+                abort(406, trans('Registro no eliminado.'));
 
-                // return AppController::responseJson(true, ['message' => 'Error al eliminar el registro.']);
+                // return AppController::responseJson(true, ['message' => trans('Registro no eliminado.')]);
             }
 
-            $request->session()->flash('alert-msj', 'Error al eliminar el registro.');
+            $request->session()->flash('alert-msj', trans('Registro no eliminado.'));
             $request->session()->flash('alert-type', 'danger');
 
             return redirect()->back();
@@ -379,21 +379,21 @@ class EssenCrudController extends Controller
             }
         } catch (QueryException $e) {
             if ($this->vue == true) {
-                abort(406, 'Error al eliminar el registro.');
+                abort(406, trans('Registro no eliminado.'));
 
-                // return AppController::responseJson(true, ['message' => 'Error al eliminar el registro.']);
+                // return AppController::responseJson(true, ['message' => trans('Registro no eliminado.')]);
             }
-            $request->session()->flash('alert-msj', 'Error al eliminar el registro.' . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
+            $request->session()->flash('alert-msj', trans('Registro no eliminado.') . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
             $request->session()->flash('alert-type', 'danger');
 
             return redirect()->back();
         }
 
         if ($this->vue == true) {
-            return AppController::responseJson(['message' => 'Registro eliminado correctamente.']);
+            return AppController::responseJson(['message' => trans('Registro eliminado correctamente.')]);
         }
 
-        $request->session()->flash('alert-msj', 'Registro eliminado correctamente.');
+        $request->session()->flash('alert-msj', trans('Registro eliminado correctamente.'));
         $request->session()->flash('alert-type', 'warning');
 
         return redirect()->back();
@@ -581,7 +581,7 @@ class EssenCrudController extends Controller
         });
 
         if (!$type) {
-            dd('Tipo (' . $arr['tipo'] . ') invalido! solamente se permiten: ' . $tipos->implode(','));
+            dd('Tipo (' . $arr['tipo'] . ') invalido! solamente se permiten: ' . $types->implode(','));
         }
         if ($type == 'file' && !$arr['path']) {
             dd('Para el tipo (file) el index (path) es requerido');

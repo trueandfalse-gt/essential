@@ -15,5 +15,8 @@ class EssentialCrudServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../resources/lang' => $this->app->langPath('/'),
         ], 'essencrud-lang');
+
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../resources/lang/json');
+
     }
 }
