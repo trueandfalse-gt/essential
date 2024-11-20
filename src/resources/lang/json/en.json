@@ -3,5 +3,10 @@
     "Registro no almacenado.": "Record not stored.",
     "Registro almacenado correctamente.": "Record stored successfully.",
     "Registro no eliminado.": "Record not deleted.",
-    "Registro eliminado correctamente.": "Record deleted successfully."
+    "Registro eliminado correctamente.": "Record deleted successfully.",
+    "Registro protegido, no es posible la eliminación.": "Record protected",
+    "Nombre": "Name",
+    "Descripción": "Description",
+    "Editar": "Edit",
+    "Nuevo": "New"
 }

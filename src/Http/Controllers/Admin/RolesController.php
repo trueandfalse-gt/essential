@@ -19,8 +19,8 @@ class RolesController extends EssenCrudController
     {
         $this->setVue();
         $this->setModel(new Role());
-        $this->setField(['name' => 'Nombre', 'field' => 'name', 'validate' => 'required']);
-        $this->setField(['name' => 'Descripción', 'field' => 'description']);
+        $this->setField(['name' => trans('Nombre'), 'field' => 'name', 'validate' => 'required']);
+        $this->setField(['name' => trans('Descripción'), 'field' => 'description']);
 
         $this->setPermissions('admin.roles');
     }
@@ -57,7 +57,7 @@ class RolesController extends EssenCrudController
             $permissions = [];
         }
 
-        $caption      = $rowId != 0 ? 'Editar' : 'Nuevo';
+        $caption      = $rowId != 0 ? trans('Editar') : trans('Nuevo');
         $columns      = $this->getColumns();
         $moduleGroups = Module::with([
             'modulePermissions.permission:id,friendly_name,show',
@@ -167,23 +167,23 @@ class RolesController extends EssenCrudController
                 }
             });
         } catch (QueryExecption $e) {
-            abort(406, 'Error al guardar el registro.');
+            abort(406, trans('Registro no almacenado.'));
         }
 
-        return response()->json(['message' => 'Registro almacenado correctamente.']);
+        return response()->json(['message' => trans('Registro almacenado correctamente.')]);
 
     }
 
     public function destroy(Request $request, $rowId)
     {
         if (in_array($rowId, [1, 2])) {
-            abort(422, 'Registro protegido, no es posible la eliminación.');
+            abort(422, trans('Registro protegido, no es posible la eliminación.'));
         }
 
         Role::find($rowId)->delete();
 
         return response()->json([
-            'message' => 'Registro eliminado correctamente.',
+            'message' => trans('Registro eliminado correctamente.'),
         ]);
     }
 }
