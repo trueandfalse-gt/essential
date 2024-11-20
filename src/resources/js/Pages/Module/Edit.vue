@@ -72,7 +72,7 @@
                     <div
                         v-else-if="field.type == 'bool'"
                         :key="`${field.type}-${index}`"
-                        :class="['mb-3', field.gridfill ? 'col-12' : 'col-sm-12 col-lg-6', field.class]"
+                        :class="['mb-3', field.gridfill ? 'col-12' : 'col-sm-12 col-lg-6']"
                     >
                         <div class="form-check">
                             <input
