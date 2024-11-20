@@ -24,28 +24,14 @@
                         </template>
                     </div>
                 </div> -->
-                <a
-                    title="Descargar a Excel"
-                    class="btn btn-sm"
-                    v-if="exports.includes('excel')"
-                    ><i
-                        class="far fa-file-excel text-muted fa-add-action-table"
-                    ></i
+                <a title="Descargar a Excel" class="btn btn-sm" v-if="exports.includes('excel')"
+                    ><i class="far fa-file-excel text-muted fa-add-action-table"></i
                 ></a>
-                <a
-                    title="Descargar a PDF"
-                    class="btn btn-sm"
-                    v-if="exports.includes('pdf')"
-                    ><i
-                        class="far fa-file-pdf text-muted fa-add-action-table"
-                    ></i
+                <a title="Descargar a PDF" class="btn btn-sm" v-if="exports.includes('pdf')"
+                    ><i class="far fa-file-pdf text-muted fa-add-action-table"></i
                 ></a>
                 <div class="float-end">
-                    <a
-                        title="Actualizar datos"
-                        class="btn btn-sm"
-                        v-on:click="realoadDataTable"
-                    >
+                    <a title="Actualizar datos" class="btn btn-sm" v-on:click="realoadDataTable">
                         <i class="fas fa-sync fa-add-action-table"></i>
                     </a>
                 </div>
@@ -62,11 +48,7 @@
                         v-model="search"
                         v-on:keyup.enter="searchOnTable"
                     />
-                    <div
-                        class="input-group-append"
-                        title="Click o Enter para buscar"
-                        v-on:click="searchOnTable"
-                    >
+                    <div class="input-group-append" title="Click o Enter para buscar" v-on:click="searchOnTable">
                         <span class="input-group-text" style="font-size: 11px">
                             <i class="fas fa-search"></i>
                         </span>
@@ -109,10 +91,7 @@
                             v-bind:style="[
                                 columnOptions.widthColumns[col.key]
                                     ? {
-                                          width:
-                                              columnOptions.widthColumns[
-                                                  col.key
-                                              ] + '%',
+                                          width: columnOptions.widthColumns[col.key] + '%',
                                       }
                                     : '',
                             ]"
@@ -120,17 +99,9 @@
                             <div style="position: relative; width: 100%">
                                 {{ col.name }}
                                 <div
-                                    style="
-                                        position: absolute;
-                                        top: 0px;
-                                        width: 100%;
-                                    "
+                                    style="position: absolute; top: 0px; width: 100%"
                                     class="text-end"
-                                    v-if="
-                                        !columnOptions.noSortColumns.includes(
-                                            col.key
-                                        )
-                                    "
+                                    v-if="!columnOptions.noSortColumns.includes(col.key)"
                                 >
                                     <a
                                         v-if="order.column == col.key"
@@ -141,63 +112,32 @@
                                             class="fas fa-arrow-down-short-wide text-muted"
                                             v-if="order.dir == 'asc'"
                                         ></i>
-                                        <i
-                                            class="fas fa-arrow-up-short-wide text-muted"
-                                            v-if="order.dir == 'desc'"
-                                        ></i>
+                                        <i class="fas fa-arrow-up-short-wide text-muted" v-if="order.dir == 'desc'"></i>
                                     </a>
-                                    <a
-                                        v-else
-                                        @click.prevent="orderBy(col.key)"
-                                        class="columnOrder"
-                                        ><i
-                                            class="fas fa-arrow-up-short-wide text-muted"
-                                        ></i
+                                    <a v-else @click.prevent="orderBy(col.key)" class="columnOrder"
+                                        ><i class="fas fa-arrow-up-short-wide text-muted"></i
                                     ></a>
                                 </div>
                             </div>
                         </th>
 
-                        <th
-                            v-if="
-                                actions &&
-                                (permissions.edit || permissions.destroy)
-                            "
-                            width="15%"
-                        >
-                            &nbsp;
-                        </th>
+                        <th v-if="actions && (permissions.edit || permissions.destroy)" width="15%">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     <template v-if="rows.length">
                         <tr v-for="(r, index) of rows" :key="index">
                             <!-- <td class="text-center" width="10px">{{ index + 1 }}</td> -->
-                            <td
-                                v-for="(c, index) of props.columns"
-                                :key="index"
-                                :class="c.class"
-                            >
+                            <td v-for="(c, index) of props.columns" :key="index" :class="c.class">
                                 <span v-if="c.type == 'numeric'">{{
-                                    r[c.key]
-                                        ? parseFloat(r[c.key]).toFixed(
-                                              c.decimals
-                                          )
-                                        : ""
+                                    r[c.key] ? parseFloat(r[c.key]).toFixed(c.decimals) : ""
                                 }}</span>
-                                <span
-                                    v-else-if="c.type == 'bool'"
-                                    v-html="r[c.key]"
-                                ></span>
+                                <span v-else-if="c.type == 'bool'">
+                                    <i :class="boolIcon(r[c.key])"></i>
+                                </span>
                                 <span v-else>{{ r[c.key] }}</span>
                             </td>
-                            <td
-                                v-if="
-                                    actions &&
-                                    (permissions.edit || permissions.destroy)
-                                "
-                                class="text-center"
-                            >
+                            <td v-if="actions && (permissions.edit || permissions.destroy)" class="text-center">
                                 <button
                                     v-if="permissions.edit"
                                     class="btn btn-sm btn-primary"
@@ -218,10 +158,7 @@
                         </tr>
                     </template>
                     <tr v-else>
-                        <td
-                            :colspan="props.columns.length + (actions ? 2 : 1)"
-                            class="text-center"
-                        >
+                        <td :colspan="props.columns.length + (actions ? 2 : 1)" class="text-center">
                             Sin datos para mostrar.
                         </td>
                     </tr>
@@ -229,51 +166,29 @@
                 <tfoot>
                     <slot name="tfooter"></slot>
                     <tr v-if="columnOptions.showInfo">
-                        <th
-                            :colspan="props.columns.length + (actions ? 2 : 1)"
-                            class="px-2"
-                        >
+                        <th :colspan="props.columns.length + (actions ? 2 : 1)" class="px-2">
                             <small
                                 >Mostrando {{ recordsFiltered }} de
                                 {{ recordsTotal }}
-                                {{
-                                    recordsTotal == 1 ? "registro" : "registros"
-                                }}</small
+                                {{ recordsTotal == 1 ? "registro" : "registros" }}</small
                             >
                             <div class="float-end">
-                                <button
-                                    class="btn btn-xs btn-outline-light"
-                                    v-on:click="pagination('firstPage')"
-                                >
+                                <button class="btn btn-xs btn-outline-light" v-on:click="pagination('firstPage')">
                                     <i class="fas fa-angles-left"></i>
                                 </button>
-                                <button
-                                    class="btn btn-xs btn-outline-light"
-                                    v-on:click="pagination('previousPage')"
-                                >
+                                <button class="btn btn-xs btn-outline-light" v-on:click="pagination('previousPage')">
                                     <i class="fas fa-angle-left"></i>
                                 </button>
-                                <button
-                                    class="btn btn-xs btn-outline-light"
-                                    v-on:click="pagination('nextPage')"
-                                >
+                                <button class="btn btn-xs btn-outline-light" v-on:click="pagination('nextPage')">
                                     <i class="fas fa-angle-right"></i>
                                 </button>
-                                <button
-                                    class="btn btn-xs btn-outline-light"
-                                    v-on:click="pagination('lastPage')"
-                                >
+                                <button class="btn btn-xs btn-outline-light" v-on:click="pagination('lastPage')">
                                     <i class="fas fa-angles-right"></i>
                                 </button>
                                 <small
                                     class="ms-1"
                                     :title="
-                                        draw +
-                                        ' de ' +
-                                        dataTablePages +
-                                        (dataTablePages == 1
-                                            ? ' página'
-                                            : ' páginas')
+                                        draw + ' de ' + dataTablePages + (dataTablePages == 1 ? ' página' : ' páginas')
                                     "
                                     >{{ draw }}/{{ dataTablePages || 1 }}</small
                                 >
@@ -359,9 +274,7 @@ let columnOptions = computed(() => {
 });
 
 let dataTablePages = computed(() => {
-    let totalPage = Math.ceil(
-        recordsTotal.value / columnOptions.value.rowsLength
-    );
+    let totalPage = Math.ceil(recordsTotal.value / columnOptions.value.rowsLength);
     return totalPage > 9 ? totalPage - 1 : totalPage;
 });
 
@@ -375,6 +288,14 @@ let columnsToFilter = computed(() => {
     });
     return props.columns;
 });
+
+function boolIcon(value) {
+    if (value) {
+        return "fas fa-check text-success fs-5";
+    }
+
+    return "fas fa-times text-danger fs-5";
+}
 
 async function getData() {
     let data = {
