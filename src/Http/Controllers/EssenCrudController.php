@@ -5,15 +5,17 @@ use Hash;
 use Crypt;
 use Exception;
 use \Carbon\Carbon;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
+use Trueandfalse\Essential\Traits\EssenTrait;
 use Trueandfalse\Essential\Http\Controllers\EssenAccessController;
 
 class EssenCrudController extends Controller
 {
-    private $vue              = false;
+    private $inertial         = true;
     private $module           = null;
     private $exports          = [];
     private $component        = 'crud-index-component';
@@ -22,16 +24,18 @@ class EssenCrudController extends Controller
     private $fields           = [];
     private $permissions      = [];
     private $permissionsExtra = [];
-    private $destroy          = false;
-    private $buttonActions    = [];
-    private $listWhere        = [];
-    private $listWhereIn      = [];
-    private $listOrderBy      = [];
-    private $listJoin         = [];
-    private $listHidden       = [];
-    private $enabledFirstOr   = false;
-    private $fiedsFirstOr     = [];
-    private $options          = [];
+    // private $softDelete       = false;
+    private $extraActions   = [];
+    private $listWhere      = [];
+    private $listWhereIn    = [];
+    private $listOrderBy    = [];
+    private $listJoin       = [];
+    private $listHidden     = [];
+    private $enabledFirstOr = false;
+    private $fiedsFirstOr   = [];
+    private $options        = [];
+
+    use EssenTrait;
 
     /**
      * index
@@ -50,49 +54,48 @@ class EssenCrudController extends Controller
 
             }
 
-            $columns      = $this->getColumns(true);
-            $orders       = Collect($this->listOrderBy);
-            $orderColumns = [];
-            foreach ($columns as $index => $arr) {
-                $orderFound = $orders->first(function ($item) use ($arr) {return $item['field'] == $arr['field'];});
-                if ($orderFound) {
-                    $orderColumns[] = [$index, $orderFound['direction']];
-                }
-            }
+            // $orders       = Collect($this->listOrderBy);
+            // $orderColumns = [];
+            // foreach ($columns as $index => $arr) {
+            //     $orderFound = $orders->first(function ($item) use ($arr) {return $item['field'] == $arr['field'];});
+            //     if ($orderFound) {
+            //         $orderColumns[] = [$index, $orderFound['direction']];
+            //     }
+            // }
 
-            if ($this->vue == true) {
-                $dataView = [
-                    'component' => $this->component,
-                    'dataVue'   => [
-                        'pageTitle'     => $this->title,
-                        'route'         => $request->route()->uri(),
-                        'columns'       => $columns,
-                        'permissions'   => $this->permissions,
-                        'orderColumns'  => $orderColumns,
-                        'buttonActions' => $this->buttonActions,
-                        'exports'       => $this->exports,
-                        'options'       => (Object) $this->options,
-                        'request'       => $request->all(),
-                    ],
-                ];
-
-                return view(config('hcode.crud.view.backendIndex'), $dataView);
-            }
-
-            $dataView = [
-                'pageTitle'     => $this->title,
-                'route'         => $request->route()->getName(),
-                'columns'       => $columns,
-                'permissions'   => $this->permissions,
-                'orderColumns'  => $orderColumns,
-                'buttonActions' => $this->buttonActions,
-                'request'       => $request->all(),
+            $columns = $this->getColumns();
+            $props   = [
+                'title'         => 'Categorías',
+                'columns'       => $this->columnsConvert($columns),
+                'permissions'   => $this->getPermissions(),
+                'extra_actions' => $this->extraActions,
+                'exports'       => $this->exports,
+                'options'       => (Object) $this->options,
             ];
 
-            return view(config('hcode.crud.view.index'), $dataView);
-        }
+            if ($this->inertial) {
+                return Inertia::render('Essen::Module/Index', $props);
+            }
 
-        return $this->getData($request);
+            $currentBaseUrl = $this->moduleBase($request->route()->getName(), '/');
+
+            $dataView = [
+                'component' => $this->component,
+                'props'     => [
+                    'title'         => $this->title,
+                    'url'           => $currentBaseUrl,
+                    'columns'       => $columns,
+                    'permissions'   => $this->permissions,
+                    // 'orderColumns' => $orderColumns,
+                    'extra_actions' => $this->extraActions,
+                    'exports'       => $this->exports,
+                    'options'       => (Object) $this->options,
+                    // 'request'      => $request->all(),
+                ],
+            ];
+
+            return view('component', $dataView);
+        }
     }
 
     /**
@@ -131,15 +134,16 @@ class EssenCrudController extends Controller
                 $rowId = Crypt::decrypt($rowId);
             }
         } catch (Exception $e) {
-            if ($this->vue == true) {
-                abort(404, trans('Registro no encontrado.'));
-                // return AppController::responseJson(false, ['message' => trans('Registro no encontrado.')]);
-            }
+            // if ($this->vue == true) {
+            //     abort(404, trans('Registro no encontrado.'));
+            //     // return AppController::responseJson(false, ['message' => trans('Registro no encontrado.')]);
+            // }
 
-            $request->session()->flash('alert-msj', trans('Registro no encontrado.'));
+            $request->session()->flash('alert-message', trans('Registro no encontrado.'));
             $request->session()->flash('alert-type', 'danger');
 
-            return redirect()->back();
+            return;
+            // return redirect()->back();
         }
 
         $model  = $this->model;
@@ -152,33 +156,55 @@ class EssenCrudController extends Controller
         }
 
         // $model->where($pk, $rowId);
-        $data          = $model->find($rowId);
-        $stringRequest = empty($request->all()) ? '' : '?' . http_build_query($request->all());
+        $record = $model->find($rowId);
 
-        if ($data) {
-            $data->id = !$this->vue ? encrypt($data->{$pk}) : $data->{$pk};
-            $route    = route($this->module . '.update', Crypt::encrypt($rowId), ) . $stringRequest;
-        } else {
-            $route = route($this->module . '.store') . $stringRequest;
+        if ($rowId == 0) {
+            $record = $this->getColumns()
+                ->mapWithKeys(function ($column) {
+                    return [$column['name'] => null];
+                });
         }
 
-        $fields = collect($this->fields)->filter(function ($item) {
-            return $item['editable'];
-        })->values();
+        $caption = $rowId != 0 ? trans('Editar') : trans('Nuevo');
+        $columns = $this->getColumns();
 
-        $dataView = [
-            'pageTitle'  => $this->title . ($rowId == 0 ? ' | <span style="font-size:12px;">Nuevo</span>' : ' | <span style="font-size:12px;">Editar</span>'),
-            'data'       => $data,
-            'fields'     => $fields,
-            'route'      => $route,
-            'routeIndex' => route($this->module . '.index', ['id' => $request->id]),
+        $props = [
+            'title'   => 'Categoría',
+            'caption' => $caption,
+            'fields'  => $this->columnsConvert($columns),
+            'record'  => $record,
         ];
 
-        if ($this->vue == true) {
-            return AppController::responseJson(['data' => $dataView]);
+        if ($this->inertial) {
+            return Inertia::render('Essen::Module/Edit', $props);
         }
 
-        return view(config('hcode.crud.view.edit'), $dataView);
+        // $stringRequest = empty($request->all()) ? '' : '?' . http_build_query($request->all());
+
+        // if ($data) {
+        //     $data->id = !$this->vue ? encrypt($data->{$pk}) : $data->{$pk};
+        //     $route    = route($this->module . '.update', Crypt::encrypt($rowId), ) . $stringRequest;
+        // } else {
+        //     $route = route($this->module . '.store') . $stringRequest;
+        // }
+
+        // $fields = collect($this->fields)->filter(function ($item) {
+        //     return $item['editable'];
+        // })->values();
+
+        // $props = [
+        //     'title'      => $this->title . ($rowId == 0 ? ' | <span style="font-size:12px;">Nuevo</span>' : ' | <span style="font-size:12px;">Editar</span>'),
+        //     'data'       => $data,
+        //     'fields'     => $fields,
+        //     // 'route'      => $route,
+        //     'routeIndex' => route($this->module . '.index', ['id' => $request->id]),
+        // ];
+
+        // if ($this->vue == true) {
+        //     return AppController::responseJson(['data' => $props]);
+        // }
+
+        return view(config('hcode.crud.view.edit'), $props);
     }
 
     /**
@@ -206,14 +232,16 @@ class EssenCrudController extends Controller
                 $rowId = Crypt::decrypt($rowId);
             }
         } catch (Exception $e) {
-            if ($this->vue == true) {
-                abort(406, trans('Registro no almacenado.'));
-                // return AppController::responseJson(false, ['message' => trans('Registro no almacenado.')]);
-            }
-            $request->session()->flash('alert-msj', trans('Registro no almacenado.'));
-            $request->session()->flash('alert-type', 'danger');
+            abort(406, trans('Registro no almacenado.'));
 
-            return redirect()->back();
+            // if ($this->vue == true) {
+            //     abort(406, trans('Registro no almacenado.'));
+            //     // return AppController::responseJson(false, ['message' => trans('Registro no almacenado.')]);
+            // }
+            // $request->session()->flash('alert-msj', trans('Registro no almacenado.'));
+            // $request->session()->flash('alert-type', 'danger');
+
+            // return redirect()->back();
         }
 
         $requestData = $request->all();
@@ -240,13 +268,14 @@ class EssenCrudController extends Controller
             $validator = Validator::make($request->all(), $fieldsValidate);
             //$validator->setAttributeNames($niceNameAttr);
             if ($validator->fails()) {
-                if ($this->vue == true) {
-                    return response()->json(['message' => 'Error en validación de campos', 'errors' => $validator->errors()], 422);
+                return response()->json(['message' => 'Error en validación de campos', 'errors' => $validator->errors()], 422);
+                // if ($this->vue == true) {
+                //     return response()->json(['message' => 'Error en validación de campos', 'errors' => $validator->errors()], 422);
 
-                    // return AppController::responseJson(['message' => 'Campos requeridos', 'errors' => $validator->errors()], 422);
-                }
+                //     // return AppController::responseJson(['message' => 'Campos requeridos', 'errors' => $validator->errors()], 422);
+                // }
 
-                return redirect()->back()->withErrors($validator)->withInput();
+                // return redirect()->back()->withErrors($validator)->withInput();
             }
         }
 
@@ -319,28 +348,32 @@ class EssenCrudController extends Controller
 
             $model->save();
         } catch (QueryException $e) {
-            if ($this->vue == true) {
-                abort(406, trans('Registro no almacenado.') . $e->getMessage());
+            abort(406, trans('Registro no almacenado.') . $e->getMessage());
 
-                // return response()->json(['message' => trans('Registro no almacenado.')]);
-            }
+            // if ($this->vue == true) {
+            //     abort(406, trans('Registro no almacenado.') . $e->getMessage());
 
-            $request->session()->flash('alert-msj', trans('Registro no almacenado.') . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
-            $request->session()->flash('alert-type', 'danger');
+            //     // return response()->json(['message' => trans('Registro no almacenado.')]);
+            // }
 
-            return redirect()->back();
+            // $request->session()->flash('alert-msj', trans('Registro no almacenado.') . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
+            // $request->session()->flash('alert-type', 'danger');
+
+            // return redirect()->back();
         }
 
-        if ($this->vue == true) {
-            return response()->json(['message' => trans('Registro almacenado correctamente.')]);
+        return response()->json(['message' => trans('Registro almacenado correctamente.')]);
 
-            // return AppController::responseJson(['message' => trans('Registro almacenado correctamente.')]);
-        }
+        // if ($this->vue == true) {
+        //     return response()->json(['message' => trans('Registro almacenado correctamente.')]);
 
-        $request->session()->flash('alert-msj', trans('Registro almacenado correctamente.'));
-        $request->session()->flash('alert-type', 'success');
+        //     // return AppController::responseJson(['message' => trans('Registro almacenado correctamente.')]);
+        // }
 
-        return redirect()->route($this->module . '.index', ['id' => $request->id]);
+        // // $request->session()->flash('alert-msj', trans('Registro almacenado correctamente.'));
+        // // $request->session()->flash('alert-type', 'success');
+
+        // // return redirect()->route($this->module . '.index', ['id' => $request->id]);
     }
 
     /**
@@ -357,56 +390,63 @@ class EssenCrudController extends Controller
                 $rowId = Crypt::decrypt($rowId);
             }
         } catch (Exception $e) {
-            if ($this->vue == true) {
-                abort(406, trans('Registro no eliminado.'));
+            abort(406, trans('Registro no eliminado.'));
 
-                // return AppController::responseJson(true, ['message' => trans('Registro no eliminado.')]);
-            }
+            // if ($this->vue == true) {
+            //     abort(406, trans('Registro no eliminado.'));
 
-            $request->session()->flash('alert-msj', trans('Registro no eliminado.'));
-            $request->session()->flash('alert-type', 'danger');
+            //     // return AppController::responseJson(true, ['message' => trans('Registro no eliminado.')]);
+            // }
 
-            return redirect()->back();
+            // $request->session()->flash('alert-msj', trans('Registro no eliminado.'));
+            // $request->session()->flash('alert-type', 'danger');
+
+            // return redirect()->back();
         }
 
         try {
             $pk = $this->model->getKeyName();
+            $this->model->where($pk, $rowId)->delete();
 
-            if ($this->destroy) {
-                $this->model->where($pk, $rowId)->delete();
-            } else {
-                $this->model->where($pk, $rowId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-            }
+            // if (!$this->softDelete) {
+            //     $this->model->where($pk, $rowId)->delete();
+            // } else {
+            //     $this->model->where($pk, $rowId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            // }
         } catch (QueryException $e) {
-            if ($this->vue == true) {
-                abort(406, trans('Registro no eliminado.'));
+            abort(406, trans('Registro no eliminado.'));
 
-                // return AppController::responseJson(true, ['message' => trans('Registro no eliminado.')]);
-            }
-            $request->session()->flash('alert-msj', trans('Registro no eliminado.') . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
-            $request->session()->flash('alert-type', 'danger');
+            // if ($this->vue == true) {
+            //     abort(406, trans('Registro no eliminado.'));
 
-            return redirect()->back();
+            //     // return AppController::responseJson(true, ['message' => trans('Registro no eliminado.')]);
+            // }
+            // $request->session()->flash('alert-msj', trans('Registro no eliminado.') . (env('APP_DEBUG') ? ('<br>Code: ' . $e->getCode() . ' | Message: ' . $e->errorInfo[2]) : ''));
+            // $request->session()->flash('alert-type', 'danger');
+
+            // return redirect()->back();
         }
 
-        if ($this->vue == true) {
-            return AppController::responseJson(['message' => trans('Registro eliminado correctamente.')]);
-        }
+        return response()->json(['message' => trans('Registro eliminado correctamente.')]);
 
-        $request->session()->flash('alert-msj', trans('Registro eliminado correctamente.'));
-        $request->session()->flash('alert-type', 'warning');
+        // if ($this->vue == true) {
+        //     return AppController::responseJson(['message' => trans('Registro eliminado correctamente.')]);
+        // }
 
-        return redirect()->back();
+        // $request->session()->flash('alert-msj', trans('Registro eliminado correctamente.'));
+        // $request->session()->flash('alert-type', 'warning');
+
+        // return redirect()->back();
     }
 
     /**
-     * Undocumented function
+     * setInertial function
      *
      * @return void
      */
-    public function setVue()
+    public function setInertial($value = true)
     {
-        $this->vue = true;
+        $this->inertial = $value;
     }
 
     /**
@@ -663,17 +703,17 @@ class EssenCrudController extends Controller
     }
 
     /**
-     * setButtonAction
+     * setExtraAction
      *
      * @param  mixed $params
      *
      * @return void
      */
-    public function setButtonAction($aParams)
+    public function setExtraAction($aParams)
     {
-        $allowed = ['title', 'routeName', 'class', 'icon'];
+        $allowed = ['title', 'route', 'class', 'icon', 'target'];
         $this->allowed($aParams, $allowed);
-        $this->buttonActions[] = $aParams;
+        $this->extraActions[] = $aParams;
     }
 
     /**
@@ -688,7 +728,7 @@ class EssenCrudController extends Controller
     {
         foreach ($aParams as $index => $val) {
             if (!in_array($index, $allowed)) {
-                dd($index . ' no es un parametro permitido para setButtonAction, solo se permiten:' . implode(', ', $allowed));
+                dd($index . ' no es un parametro permitido para setextraAction, solo se permiten:' . implode(', ', $allowed));
             }
         }
     }
@@ -858,14 +898,14 @@ class EssenCrudController extends Controller
     {
         $html = '<div class="text-center">';
 
-        if (count($this->buttonActions) > 1) {
+        if (count($this->extraActions) > 1) {
             $html .= '<div class="btn-group btn-group-xs">
                 <a class="btn btn-sm btn-info2 btnMoreActions" title="Más acciones" href="javascript:void(0)">
                     <span class="fas fa-ellipsis-h"></span>
                 </a>
             </div> ';
         } else {
-            foreach ($this->buttonActions as $item) {
+            foreach ($this->extraActions as $item) {
                 $html .= '<div class="btn-group btn-group-xs">
                     <a class="btn btn-sm ' . (isset($item['class']) ? $item['class'] : 'btn-default') . '" title="' . $item['title'] . '" href="' . route($item['routeName'], $rowId) . '">
                         <span class="' . (isset($item['icon']) ? $item['icon'] : 'fas fa-question') . '"></span>
@@ -943,19 +983,25 @@ class EssenCrudController extends Controller
         }
 
         if ($request->order) {
-            if ($this->vue) {
-                if ($request->order) {
-                    $order = is_array($request->order) ? (Object) $request->order : $request->order;
-                    if ($order->column) {
-                        $query->orderBy($order->column, $order->dir);
-                    }
-                }
-            } else {
-                foreach ($request->input('order', []) as $arr) {
-                    $field = explode(' ', $columns[$arr['column']]['field']);
-                    $query->orderBy(array_shift($field), $arr['dir']);
+            if ($request->order) {
+                $order = is_array($request->order) ? (Object) $request->order : $request->order;
+                if ($order->column) {
+                    $query->orderBy($order->column, $order->dir);
                 }
             }
+            // if ($this->vue) {
+            //     if ($request->order) {
+            //         $order = is_array($request->order) ? (Object) $request->order : $request->order;
+            //         if ($order->column) {
+            //             $query->orderBy($order->column, $order->dir);
+            //         }
+            //     }
+            // } else {
+            //     foreach ($request->input('order', []) as $arr) {
+            //         $field = explode(' ', $columns[$arr['column']]['field']);
+            //         $query->orderBy(array_shift($field), $arr['dir']);
+            //     }
+            // }
         } else {
             foreach ($this->listOrderBy as $arr) {
                 $query->orderBy($arr['field'], $arr['direction']);
@@ -1032,28 +1078,12 @@ class EssenCrudController extends Controller
                             $value = ($value ? '<div class="text-center"><i class="fas fa-check text-center"></i></div>' : '');
                         }
 
-                        if ($this->vue == true) {
-                            $values[$key] = $value;
-                        } else {
-                            $values[] = $value;
-                        }
+                        $values[$key] = $value;
                     }
                     $i++;
                 } else {
-                    if ($this->vue == true) {
-                        $values['__id'] = $value;
-                    }
+                    $values['__id'] = $value;
                 }
-
-                // if ($this->vue == true) {
-                //     $values[$key] = $value;
-                // } else {
-                //     $values[] = $value;
-                // }
-            }
-            if ($this->vue != true) {
-                $path     = str_replace(['/data', 'api/'], ['', ''], $path);
-                $values[] = $this->getActions($requestToActions, $path, Crypt::encrypt($data['__id'] ?? 0));
             }
 
             return $values;

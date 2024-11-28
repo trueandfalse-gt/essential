@@ -138,8 +138,8 @@ const { handleErrors, errorInputClass, hasInputError, getInputErrors } = useErro
 async function submit() {
     processing.value = true;
     await http({
-        method: props.record.id ? "patch" : "post",
-        url: props.record.id ? `/${props.url}/${props.record.id}` : `/${props.url}`,
+        method: props.record.__id ? "patch" : "post",
+        url: props.record.__id ? `/${props.url}/${props.record.__id}` : `/${props.url}`,
         data: props.record,
     })
         .then((result) => {
