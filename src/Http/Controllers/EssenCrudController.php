@@ -169,7 +169,7 @@ class EssenCrudController extends Controller
         $columns = $this->getColumns();
 
         $props = [
-            'title'   => 'Categoría',
+            'title'   => $this->title,
             'caption' => $caption,
             'fields'  => $this->columnsConvert($columns),
             'record'  => $record,
