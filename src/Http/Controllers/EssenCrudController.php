@@ -19,7 +19,7 @@ class EssenCrudController extends Controller
     private $module           = null;
     private $exports          = [];
     private $component        = 'crud-index-component';
-    private $title            = '';
+    private $title            = null;
     private $model            = null;
     private $fields           = [];
     private $permissions      = [];
@@ -65,7 +65,7 @@ class EssenCrudController extends Controller
 
             $columns = $this->getColumns();
             $props   = [
-                'title'         => 'Categorías',
+                'title'         => $this->title,
                 'columns'       => $this->columnsConvert($columns),
                 'permissions'   => $this->getPermissions(),
                 'extra_actions' => $this->extraActions,
