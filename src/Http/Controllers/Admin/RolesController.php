@@ -17,7 +17,6 @@ class RolesController extends EssenCrudController
 
     public function __construct()
     {
-        $this->setVue();
         $this->setModel(new Role());
         $this->setField(['name' => trans('Nombre'), 'field' => 'name', 'validate' => 'required']);
         $this->setField(['name' => trans('Descripción'), 'field' => 'description']);

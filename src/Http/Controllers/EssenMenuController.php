@@ -39,7 +39,7 @@ class EssenMenuController extends Controller
                     return (Object) [
                         'id'        => $menu->id,
                         'parent_id' => $menu->parent_id,
-                        'name'      => $menu->name,
+                        'name'      => trans($menu->name),
                         'order'     => $menu->order,
                         'icon'      => $menu->icon,
                         'module'    => $module,
