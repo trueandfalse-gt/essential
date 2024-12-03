@@ -5,5 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRole extends Model
 {
-    protected $table = 'auth_user_roles';
+    protected $table   = 'auth_user_roles';
+    protected $guarded = ['id'];
+
+    public $timestamps = false;
 }
