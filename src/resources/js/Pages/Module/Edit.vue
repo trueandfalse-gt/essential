@@ -103,6 +103,22 @@
                             {{ getInputErrors(field.key) }}
                         </div>
                     </div>
+                    <div
+                        v-else-if="['date', 'datetime'].includes(field.type)"
+                        :key="`${field.type}-${index}`"
+                        :class="['mb-3', field.gridfill ? 'col-12' : 'col-sm-12 col-lg-6', field.class]"
+                    >
+                        <label for="">{{ field.name }}</label>
+                        <input
+                            :type="field.type == 'datetime' ? 'datetime-local' : 'date'"
+                            :name="field.key"
+                            :class="['form-control', errorInputClass(field.key)]"
+                            v-model="record[field.key]"
+                        />
+                        <div class="valid-feedback d-block text-danger" v-if="hasInputError(field.key)">
+                            {{ getInputErrors(field.key) }}
+                        </div>
+                    </div>
                 </template>
             </div>
         </template>
