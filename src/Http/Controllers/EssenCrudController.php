@@ -839,11 +839,11 @@ class EssenCrudController extends Controller
         }
         if ($onlyShow) {
             $columns = $fields->where('show', true)->map(function ($item) {
-                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path']];
+                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path'], 'collect' => $item['collect']];
             });
         } else {
             $columns = $fields->map(function ($item) {
-                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path']];
+                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path'], 'collect' => $item['collect']];
             });
         }
 
