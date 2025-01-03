@@ -90,15 +90,13 @@
                         :class="['mb-3', field.gridfill ? 'col-12' : 'col-sm-12 col-lg-6', field.class]"
                     >
                         <label for="">{{ field.name }}</label>
-                        <select
-                            :name="field.key"
-                            :class="['form-control', errorInputClass(field.key)]"
+                        <VueSelect
                             v-model="record[field.key]"
-                        >
-                            <option v-for="(value, key) of field.collect" :key="key" :value="key">
-                                {{ value }}
-                            </option>
-                        </select>
+                            :is-multi="field.multi"
+                            :options="field.collect"
+                            placeholder="Seleccionar"
+                            :class="errorInputClass(field.key)"
+                        />
                         <div class="valid-feedback d-block text-danger" v-if="hasInputError(field.key)">
                             {{ getInputErrors(field.key) }}
                         </div>
@@ -136,6 +134,7 @@ import http from "@/tools/http";
 import Card from "@essen/components/EssenCard.vue";
 import { toast } from "vue3-toastify";
 import { useErrors } from "@essen/composables/errors";
+import VueSelect from "vue3-select-component";
 
 const props = defineProps({
     url: String,

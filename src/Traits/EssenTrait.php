@@ -5,15 +5,16 @@ use Illuminate\Http\Request;
 
 trait EssenTrait
 {
-    public function columnsConvert($colums)
+    public function columnsConvert($columns)
     {
-        return $colums->map(function ($column) {
+        return $columns->map(function ($columns) {
             return [
-                'key'      => $column['field'],
-                'name'     => $column['name'],
-                'type'     => $column['type'],
-                'class'    => $column['class'],
-                'decimals' => $column['decimals'],
+                'key'      => $columns['field'],
+                'name'     => $columns['name'],
+                'type'     => $columns['type'],
+                'class'    => $columns['class'],
+                'decimals' => $columns['decimals'],
+                'collect'  => $columns['collect'],
             ];
         });
     }

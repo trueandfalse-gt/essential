@@ -248,7 +248,7 @@ class EssenCrudController extends Controller
         $fields      = collect($this->fields)->filter(function ($item) {
             return $item['editable'];
         });
-        $fieldsValidate = [];
+        $validateFields = [];
         //$niceNameAttr   = [];
 
         foreach ($requestData as $key => $value) {
@@ -256,16 +256,16 @@ class EssenCrudController extends Controller
                 return $item['fieldAs'] == $key;
             });
             if ($field && $field['validate']) {
-                $fieldsValidate[$field['fieldAs']] = $field['validate'];
+                $validateFields[$field['fieldAs']] = $field['validate'];
             }
             if ($field && $field['type'] == 'password' && ($rowId == 0 || $value)) {
-                //$fieldsValidate[$field['fieldAs']] = 'required';
-                $fieldsValidate['passwordconfirm'] = 'required|same:password';
+                //$validateFields[$field['fieldAs']] = 'required';
+                $validateFields['passwordconfirm'] = 'required|same:password';
             }
         }
 
-        if (!empty($fieldsValidate)) {
-            $validator = Validator::make($request->all(), $fieldsValidate);
+        if (!empty($validateFields)) {
+            $validator = Validator::make($request->all(), $validateFields);
             //$validator->setAttributeNames($niceNameAttr);
             if ($validator->fails()) {
                 return response()->json(['message' => 'Error en validación de campos', 'errors' => $validator->errors()], 422);
