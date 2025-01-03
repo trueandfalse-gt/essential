@@ -383,7 +383,7 @@ function pagination(option) {
                 start.value = start.value - columnOptions.value.rowsLength;
                 break;
         }
-        this.mSearch();
+        this.searchOnTable();
     }
 }
 
