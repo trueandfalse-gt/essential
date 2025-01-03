@@ -15,6 +15,7 @@ trait EssenTrait
                 'class'    => $columns['class'],
                 'decimals' => $columns['decimals'],
                 'collect'  => $columns['collect'],
+                'multi'    => $columns['multi'],
             ];
         });
     }

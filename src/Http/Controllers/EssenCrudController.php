@@ -162,7 +162,7 @@ class EssenCrudController extends Controller
         if ($rowId == 0) {
             $record = $columns
                 ->mapWithKeys(function ($column) {
-                    return [$column['name'] => null];
+                    return [$column['fieldAs'] => null];
                 });
         }
 
@@ -595,7 +595,7 @@ class EssenCrudController extends Controller
             'show'            => true,
             'type'            => 'string',
             'class'           => null,
-            'multi'           => null,
+            'multi'           => false,
             'default'         => null,
             'decimals'        => 0,
             'collect'         => null,
@@ -839,11 +839,11 @@ class EssenCrudController extends Controller
         }
         if ($onlyShow) {
             $columns = $fields->where('show', true)->map(function ($item) {
-                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path'], 'collect' => $item['collect']];
+                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path'], 'collect' => $item['collect'], 'multi' => $item['multi']];
             });
         } else {
             $columns = $fields->map(function ($item) {
-                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path'], 'collect' => $item['collect']];
+                return ['field' => $item['field'], 'fieldAs' => $item['fieldAs'], 'name' => $item['name'], 'type' => $item['type'], 'class' => $item['class'], 'decimals' => $item['decimals'], 'path' => $item['path'], 'collect' => $item['collect'], 'multi' => $item['multi']];
             });
         }
 
