@@ -9,7 +9,7 @@ trait EssenTrait
     {
         return $columns->map(function ($columns) {
             return [
-                'key'      => $columns['field'],
+                'key'      => $columns['fieldAs'],
                 'name'     => $columns['name'],
                 'type'     => $columns['type'],
                 'class'    => $columns['class'],

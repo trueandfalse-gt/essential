@@ -63,7 +63,7 @@ class EssenCrudController extends Controller
             //     }
             // }
 
-            $columns = $this->getColumns();
+            $columns = $this->getColumns(true);
             $props   = [
                 'title'         => $this->title,
                 'columns'       => $this->columnsConvert($columns),
@@ -562,7 +562,7 @@ class EssenCrudController extends Controller
     {
         $aParams      = Collect($aParams);
         $types        = Collect(['string', 'multi', 'numeric', 'date', 'datetime', 'time', 'bool', 'listbool', 'combobox', 'password', 'enum', 'file', 'textarea', 'url', 'summernote']);
-        $keysOfParams = Collect(['field', 'name', 'editable', 'show', 'type', 'class', 'default', 'decimals', 'collect', 'validate', 'gridfill', 'path', 'passwordconfirm']);
+        $keysOfParams = Collect(['field', 'name', 'editable', 'show', 'type', 'class', 'multi', 'default', 'decimals', 'collect', 'validate', 'gridfill', 'path', 'passwordconfirm']);
 
         $aParams->each(function ($item, $index) use ($keysOfParams) {
             $exist = $keysOfParams->first(function ($key) use ($index) {
@@ -596,6 +596,7 @@ class EssenCrudController extends Controller
             'show'            => true,
             'type'            => 'string',
             'class'           => null,
+            'multi'           => null,
             'default'         => null,
             'decimals'        => 0,
             'collect'         => null,
