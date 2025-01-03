@@ -156,19 +156,18 @@ class EssenCrudController extends Controller
         }
 
         // $model->where($pk, $rowId);
-        $record = $model->find($rowId);
+        $record  = $model->find($rowId);
+        $columns = collect($this->fields)->where('editable', true);
 
         if ($rowId == 0) {
-            $record = $this->getColumns()
+            $record = $columns
                 ->mapWithKeys(function ($column) {
                     return [$column['name'] => null];
                 });
         }
 
         $caption = $rowId != 0 ? trans('Editar') : trans('Nuevo');
-        $columns = $this->getColumns();
-
-        $props = [
+        $props   = [
             'title'   => $this->title,
             'caption' => $caption,
             'fields'  => $this->columnsConvert($columns),
