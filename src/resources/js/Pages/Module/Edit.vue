@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <div
-                        v-else-if="field.type == 'combobox'"
+                        v-else-if="field.type == 'select'"
                         :key="`${field.type}-${index}`"
                         :class="['mb-3', field.gridfill ? 'col-12' : 'col-sm-12 col-lg-6', field.class]"
                     >
