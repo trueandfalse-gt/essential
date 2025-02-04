@@ -627,7 +627,7 @@ class EssenCrudController extends Controller
         });
 
         if (!$type) {
-            dd('Tipo (' . $arr['tipo'] . ') invalido! solamente se permiten: ' . $types->implode(','));
+            dd('Tipo (' . $arr['type'] . ') invalido! solamente se permiten: ' . $types->implode(','));
         }
         if ($type == 'file' && !$arr['path']) {
             dd('Para el tipo (file) el index (path) es requerido');
