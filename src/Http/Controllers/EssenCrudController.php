@@ -162,7 +162,13 @@ class EssenCrudController extends Controller
         if ($rowId == 0) {
             $record = $columns
                 ->mapWithKeys(function ($column) {
-                    return [$column['fieldAs'] => null];
+                    $default = null;
+
+                    if ($column['type'] == 'select' && $column['multi']) {
+                        $default = [];
+                    }
+
+                    return [$column['fieldAs'] => $default];
                 });
         }
 
@@ -560,7 +566,7 @@ class EssenCrudController extends Controller
     public function setField($aParams)
     {
         $aParams      = Collect($aParams);
-        $types        = Collect(['string', 'multi', 'numeric', 'date', 'datetime', 'time', 'bool', 'listbool', 'combobox', 'password', 'enum', 'file', 'textarea', 'url', 'summernote']);
+        $types        = Collect(['string', 'multi', 'numeric', 'date', 'datetime', 'time', 'bool', 'listbool', 'select', 'password', 'enum', 'file', 'textarea', 'url', 'summernote']);
         $keysOfParams = Collect(['field', 'name', 'editable', 'show', 'type', 'class', 'multi', 'default', 'decimals', 'collect', 'validate', 'gridfill', 'path', 'passwordconfirm']);
 
         $aParams->each(function ($item, $index) use ($keysOfParams) {
@@ -626,13 +632,13 @@ class EssenCrudController extends Controller
         if ($type == 'file' && !$arr['path']) {
             dd('Para el tipo (file) el index (path) es requerido');
         }
-        if ($type == 'combobox' && !$arr['collect']) {
-            dd('Para el tipo (combobox) el index (collect) es requerido');
+        if ($type == 'select' && !$arr['collect']) {
+            dd('Para el tipo (select) el index (collect) es requerido');
         }
         if ($type == 'listbool' && $arr['collect']) {
             dd('Para el tipo (listbool) el index (collect) es requerido');
         }
-        if ($type == 'combobox') {
+        if ($type == 'select') {
             $arr['show'] = false;
         }
 
