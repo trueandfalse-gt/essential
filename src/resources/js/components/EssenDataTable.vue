@@ -148,7 +148,7 @@
                                 </button>
                                 <button
                                     v-if="permissions.destroy"
-                                    class="btn btn-sm btn-danger"
+                                    class="btn btn-sm btn-danger me-1"
                                     title="Eliminar"
                                     @click="actionDestroy(r.__id)"
                                 >
