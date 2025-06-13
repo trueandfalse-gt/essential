@@ -140,7 +140,7 @@
                             <td v-if="actions && (permissions.edit || permissions.destroy)" class="text-center">
                                 <button
                                     v-if="permissions.edit"
-                                    class="btn btn-sm btn-primary"
+                                    class="btn btn-sm btn-primary me-1"
                                     title="Editar"
                                     @click="actionEdit($event, r.__id)"
                                 >
@@ -148,7 +148,7 @@
                                 </button>
                                 <button
                                     v-if="permissions.destroy"
-                                    class="btn btn-sm btn-danger ms-1"
+                                    class="btn btn-sm btn-danger"
                                     title="Eliminar"
                                     @click="actionDestroy(r.__id)"
                                 >
