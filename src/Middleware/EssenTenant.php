@@ -14,7 +14,7 @@ class EssenTenant
         $tenant = Tenant::where('domain', $domain)->where('active', 1)->first();
 
         if (!$tenant) {
-            $message = 'Dominio no permitido';
+            $message = __('Dominio no permitido');
             if ($request->expectsJson()) {
                 return response()->json(['error' => $message, $domain], 404);
             } else {

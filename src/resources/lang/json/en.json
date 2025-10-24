@@ -8,5 +8,6 @@
     "Nombre": "Name",
     "Descripción": "Description",
     "Editar": "Edit",
-    "Nuevo": "New"
+    "Nuevo": "New",
+    "Dominio no permitido": "Domain not allowed"
 }
