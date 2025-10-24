@@ -70,8 +70,9 @@ add config/database.php
 Connection Tenants migrate
 
 ```
+ // Custom Database
  php artisan migrate --database=tenants --path=database/migrations/tenants
- //OR
+ // OR
  php artisan essential:migrate-tenants
 ```
 
