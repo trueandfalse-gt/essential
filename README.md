@@ -71,6 +71,8 @@ Connection Tenants migrate
 
 ```
  php artisan migrate --database=tenants --path=database/migrations/tenants
+ //OR
+ php artisan essential:migrate-tenants
 ```
 
 #### Tenants migrate
