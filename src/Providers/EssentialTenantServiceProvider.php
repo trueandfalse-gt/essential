@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use Trueandfalse\Essential\Middleware\EssenTenant;
 use Trueandfalse\Essential\Console\Commands\TenantsSeeder;
 use Trueandfalse\Essential\Console\Commands\TenantsMigrate;
+use Trueandfalse\Essential\Console\Commands\EssentialMigrate;
 
 class EssentialTenantServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,7 @@ class EssentialTenantServiceProvider extends ServiceProvider
             $this->commands([
                 TenantsMigrate::class,
                 TenantsSeeder::class,
+                EssentialMigrate::class,
             ]);
         }
     }
