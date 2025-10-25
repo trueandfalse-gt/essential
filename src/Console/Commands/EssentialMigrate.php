@@ -35,7 +35,7 @@ class EssentialMigrate extends Command
         ];
 
         if (!$isRollback) {
-            $this->call('migrate:', $options);
+            $this->call('migrate', $options);
         } else {
             $this->call('migrate:rollback', $options);
 
