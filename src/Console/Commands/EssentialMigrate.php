@@ -10,7 +10,7 @@ class EssentialMigrate extends Command
      *
      * @var string
      */
-    protected $signature = 'essential:migrate-tenants';
+    protected $signature = 'essential:migrate-tenants {--force} {--rollback}';
 
     /**
      * The console command description.
@@ -26,13 +26,20 @@ class EssentialMigrate extends Command
      */
     public function handle()
     {
-        $path    = 'database/migrations/tenants';
-        $options = [
+        $isRollback = $this->option('rollback');
+        $path       = 'database/migrations/tenants';
+        $options    = [
+            '--force'    => $this->option('force'),
             '--path'     => $path,
             '--database' => config('database.connections.tenants.database'),
         ];
 
-        $this->call('migrate', $options);
+        if (!$isRollback) {
+            $this->call('migrate:', $options);
+        } else {
+            $this->call('migrate:rollback', $options);
+
+        }
         $this->info("Migration completed.");
     }
 }

@@ -28,7 +28,7 @@ class AllTableTenants extends Migration
             $table->id();
             $table->foreignId('company_id')->nullable()->constraint()->on('empresas');
             $table->string('domain')->unique();
-            $table->string('description')->nullalble();
+            $table->string('description')->nullable();
             $table->string('database_name')->unique();
             $table->string('database_host');
             $table->string('database_user');
