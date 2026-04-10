@@ -7,10 +7,17 @@
                         <label for="">Nombre</label>
                         <input
                             type="text"
-                            :class="['form-control', record, errorInputClass('name')]"
+                            :class="[
+                                'form-control',
+                                record,
+                                errorInputClass('name'),
+                            ]"
                             v-model="record.name"
                         />
-                        <div v-if="hasInputError('name')" class="valid-feedback d-block text-danger">
+                        <div
+                            v-if="hasInputError('name')"
+                            class="valid-feedback d-block text-danger"
+                        >
                             {{ getInputErrors("name") }}
                         </div>
                     </div>
@@ -18,10 +25,17 @@
                         <label for="">Descripción</label>
                         <input
                             type="text"
-                            :class="['form-control', record, errorInputClass('description')]"
+                            :class="[
+                                'form-control',
+                                record,
+                                errorInputClass('description'),
+                            ]"
                             v-model="record.description"
                         />
-                        <div v-if="hasInputError('description')" class="valid-feedback d-block text-danger">
+                        <div
+                            v-if="hasInputError('description')"
+                            class="valid-feedback d-block text-danger"
+                        >
                             {{ getInputErrors("description") }}
                         </div>
                     </div>
@@ -48,7 +62,10 @@
                                     </p>
                                 </div>
                                 <div class="card-body">
-                                    <div v-for="permission of module.permissions" class="form-check">
+                                    <div
+                                        v-for="permission of module.permissions"
+                                        class="form-check"
+                                    >
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
@@ -56,8 +73,14 @@
                                             :value="permission.id"
                                             v-model="role_permissions"
                                         />
-                                        <label class="form-check-label" :for="`mp${permission.id}`">
-                                            {{ permission.permission.friendly_name }}
+                                        <label
+                                            class="form-check-label"
+                                            :for="`mp${permission.id}`"
+                                        >
+                                            {{
+                                                permission.permission
+                                                    .friendly_name
+                                            }}
                                         </label>
                                     </div>
                                 </div>
@@ -67,7 +90,11 @@
                 </template>
             </template>
         </Card>
-        <button class="btn btn-primary mt-2" @click="submit" :disabled="processing">
+        <button
+            class="btn btn-primary mt-2"
+            @click="submit"
+            :disabled="processing"
+        >
             {{ processing ? "Guardando..." : "Guardar" }}
         </button>
     </div>
@@ -94,7 +121,8 @@ const props = defineProps({
     module_groups: Object,
 });
 
-const { handleErrors, errorInputClass, hasInputError, getInputErrors } = useErrors();
+const { handleErrors, errorInputClass, hasInputError, getInputErrors } =
+    useErrors();
 
 const processing = ref(false);
 const role_permissions = ref(props.role_permissions);
@@ -104,9 +132,13 @@ const module_status = computed(() => {
 
     for (let modules of Object.values(props.module_groups)) {
         for (let module of modules) {
-            let module_permission = module.permissions.map((permission) => permission.id);
+            let module_permission = module.permissions.map(
+                (permission) => permission.id,
+            );
 
-            let permissions = role_permissions.value.filter((permission) => module_permission.includes(permission));
+            let permissions = role_permissions.value.filter((permission) =>
+                module_permission.includes(permission),
+            );
 
             let status = "danger";
 
@@ -128,15 +160,25 @@ async function submit() {
     props.record.module_permissions = role_permissions.value;
     await http({
         method: props.record.id ? "patch" : "post",
-        url: props.record.id ? `/${props.url}/${props.record.id}` : `/${props.url}`,
+        url: props.record.id
+            ? `/${props.url}/${props.record.id}`
+            : `/${props.url}`,
         data: props.record,
     })
         .then((result) => {
-            if (result.data.message) {
-                toast.success(result.data.message);
-            }
+            const message = result.data.message;
 
-            router.get(`/${props.url}`);
+            router.get(
+                `/${props.url}`,
+                {},
+                {
+                    onSuccess: () => {
+                        if (message) {
+                            toast.success(message);
+                        }
+                    },
+                },
+            );
         })
         .catch((error) => {
             handleErrors(error);
