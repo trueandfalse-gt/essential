@@ -150,11 +150,19 @@ async function submit() {
         data: props.record,
     })
         .then((result) => {
-            if (result.data.message) {
-                toast.success(result.data.message);
-            }
+            const message = result.data.message;
 
-            router.get(`/${props.url}`);
+            router.get(
+                `/${props.url}`,
+                {},
+                {
+                    onSuccess: () => {
+                        if (message) {
+                            toast.success(message);
+                        }
+                    },
+                },
+            );
         })
         .catch((error) => {
             handleErrors(error);
